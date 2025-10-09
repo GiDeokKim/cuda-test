@@ -1,5 +1,5 @@
-load("@rules_cuda//cuda:defs.bzl", "cuda_library")
-load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_cuda//cuda:defs.bzl", "cuda_library", "cuda_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -17,5 +17,17 @@ cuda_library(
     hdrs = ["matrix.cuh"],
     deps = [
         ":matrix",
+    ],
+)
+
+# Test suite
+cuda_test(
+    name = "matrix_test",
+    srcs = ["matrix_test.cu"],
+    deps = [
+        ":matrix",
+        ":vector_add_kernel",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
     ],
 )
