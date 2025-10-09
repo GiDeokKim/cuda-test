@@ -1,0 +1,21 @@
+load("@rules_cuda//cuda:defs.bzl", "cuda_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+# CUDA Math library
+cuda_library(
+    name = "matrix",
+    srcs = ["matrix.cu"],
+    hdrs = ["matrix.cuh"],
+)
+
+# Vector addition kernel
+cuda_library(
+    name = "vector_add_kernel",
+    srcs = ["kernel.cu"],
+    hdrs = ["matrix.cuh"],
+    deps = [
+        ":matrix",
+    ],
+)
