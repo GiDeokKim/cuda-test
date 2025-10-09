@@ -2,19 +2,42 @@ load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
-# GPU 메모리 관리 라이브러리
+# GPU 메모리 관리 라이브러리 (DLL 지원 - 명시적 인스턴스화)
 cc_library(
     name = "gpu_memory",
-    hdrs = ["gpu_memory.h"],
+    srcs = [
+        "gpu_memory_explicit.cc",
+    ],
+    hdrs = [
+        "gpu_memory.h",
+        "gpu_memory_exception.h",
+        "gpu_memory_template.h",
+        "cuda_stream.h",
+    ],
     deps = [
         "@rules_cuda//cuda:runtime",
     ],
+    # 공유 라이브러리로 빌드
+    linkstatic = False,
+    # 공개 헤더 파일들
+    includes = ["."],
 )
 
-# GPU 메모리 관리 테스트
+# GPU 메모리 관리 테스트 (템플릿 버전)
 cc_test(
     name = "gpu_memory_test",
     srcs = ["gpu_memory_test.cc"],
+    deps = [
+        ":gpu_memory",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
+# GPU 메모리 관리 테스트 (DLL 버전)
+cc_test(
+    name = "gpu_memory_dll_test",
+    srcs = ["gpu_memory_dll_test.cc"],
     deps = [
         ":gpu_memory",
         "@googletest//:gtest",

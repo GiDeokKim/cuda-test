@@ -1,0 +1,12 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+# DLL 사용 예제
+cc_binary(
+    name = "dll_example",
+    srcs = ["dll_example.cc"],
+    deps = [
+        "//src/device:gpu_memory",
+    ],
+)
